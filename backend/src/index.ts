@@ -37,6 +37,7 @@ const app = new Elysia()
 
   // 3. Health Check
   .get('/', () => ({ status: 'ok', message: 'Dorm API is running 🚀' }))
+  .listen(process.env.PORT || 3001)
 
 console.log(`🦊 Elysia is running at ${app.server?.hostname}:${process.env.PORT}`)
 console.log(`📚 Swagger UI at http://localhost:${process.env.PORT}/swagger`)
