@@ -1,6 +1,8 @@
 import { Elysia } from 'elysia'
 import { cors } from '@elysiajs/cors'
 import { swagger } from '@elysiajs/swagger'
+import dotenv from 'dotenv'
+dotenv.config()
 
 // Import Controllers
 import { roomController } from './controllers/room'
@@ -36,7 +38,5 @@ const app = new Elysia()
   // 3. Health Check
   .get('/', () => ({ status: 'ok', message: 'Dorm API is running 🚀' }))
 
-  .listen(3000)
-
-console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`)
-console.log(`📚 Swagger UI at http://localhost:3000/swagger`)
+console.log(`🦊 Elysia is running at ${app.server?.hostname}:${process.env.PORT}`)
+console.log(`📚 Swagger UI at http://localhost:${process.env.PORT}/swagger`)
