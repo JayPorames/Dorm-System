@@ -1,7 +1,42 @@
-import { Elysia } from "elysia";
+import { Elysia } from 'elysia'
+import { cors } from '@elysiajs/cors'
+import { swagger } from '@elysiajs/swagger'
 
-const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
+// Import Controllers
+import { roomController } from './controllers/room'
+// import { tenantController } from './controllers/tenant'
+// import { contractController } from './controllers/contract'
+// import { billingController } from './controllers/billing'
 
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);
+const app = new Elysia()
+  // 1. Setup Plugins
+  .use(cors()) // อนุญาตให้ Frontend ยิงเข้ามาได้ทุก Origin (Dev Mode)
+  .use(swagger({
+    documentation: {
+      info: {
+        title: 'Dormitory Management API',
+        version: '1.0.0',
+        description: 'ระบบจัดการหอพัก (Back-end with Elysia + Bun)'
+      },
+      tags: [
+        { name: 'Rooms', description: 'จัดการข้อมูลห้องพัก' },
+        { name: 'Tenants', description: 'จัดการข้อมูลผู้เช่า' },
+        { name: 'Contracts', description: 'ทำสัญญาเช่า/แจ้งย้ายออก' },
+        { name: 'Billing', description: 'คำนวณมิเตอร์และค่าใช้จ่าย' }
+      ]
+    }
+  }))
+
+  // 2. Register Routes
+  .use(roomController)
+  // .use(tenantController)
+  // .use(contractController)
+  // .use(billingController)
+
+  // 3. Health Check
+  .get('/', () => ({ status: 'ok', message: 'Dorm API is running 🚀' }))
+
+  .listen(3000)
+
+console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`)
+console.log(`📚 Swagger UI at http://localhost:3000/swagger`)
