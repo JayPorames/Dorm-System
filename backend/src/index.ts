@@ -5,7 +5,7 @@ import { swagger } from '@elysiajs/swagger'
 // Import Controllers
 import { roomController } from './controllers/room'
 import { tenantController } from './controllers/tenant'
-// import { contractController } from './controllers/contract'
+import { contractController } from './controllers/contract'
 // import { billingController } from './controllers/billing'
 
 const app = new Elysia()
@@ -30,7 +30,7 @@ const app = new Elysia()
   // 2. Register Routes
   .use(roomController)
   .use(tenantController)
-  // .use(contractController)
+  .use(contractController)
   // .use(billingController)
 
   // 3. Health Check
