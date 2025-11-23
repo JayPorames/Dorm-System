@@ -12,7 +12,7 @@
     "db:reset": "prisma migrate reset"
   },
   "prisma": {
-    "seed": "bun run prisma/seed.ts"
+    "seed": "bun run src/seed.ts"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.0",
