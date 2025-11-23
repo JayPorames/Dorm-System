@@ -6,7 +6,7 @@ import { swagger } from '@elysiajs/swagger'
 import { roomController } from './controllers/room'
 import { tenantController } from './controllers/tenant'
 import { contractController } from './controllers/contract'
-// import { billingController } from './controllers/billing'
+import { billingController } from './controllers/billing'
 
 const app = new Elysia()
   // 1. Setup Plugins
@@ -31,7 +31,7 @@ const app = new Elysia()
   .use(roomController)
   .use(tenantController)
   .use(contractController)
-  // .use(billingController)
+  .use(billingController)
 
   // 3. Health Check
   .get('/', () => ({ status: 'ok', message: 'Dorm API is running 🚀' }))
