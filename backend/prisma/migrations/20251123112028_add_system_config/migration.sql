@@ -47,7 +47,6 @@ CREATE TABLE `MeterReading` (
     `month` INTEGER NOT NULL,
     `year` INTEGER NOT NULL,
 
-    UNIQUE INDEX `MeterReading_roomId_month_year_key`(`roomId`, `month`, `year`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -58,6 +57,8 @@ CREATE TABLE `Invoice` (
     `issueDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `dueDate` DATETIME(3) NOT NULL,
     `rentAmount` DECIMAL(10, 2) NOT NULL,
+    `waterUnit` INTEGER NOT NULL DEFAULT 0,
+    `electricUnit` INTEGER NOT NULL DEFAULT 0,
     `waterAmount` DECIMAL(10, 2) NOT NULL,
     `electricAmount` DECIMAL(10, 2) NOT NULL,
     `totalAmount` DECIMAL(10, 2) NOT NULL,
@@ -73,6 +74,15 @@ CREATE TABLE `RepairRequest` (
     `description` VARCHAR(191) NOT NULL,
     `status` VARCHAR(191) NOT NULL DEFAULT 'PENDING',
     `reportDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `SystemConfig` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `waterRate` DECIMAL(10, 2) NOT NULL DEFAULT 18.00,
+    `electricRate` DECIMAL(10, 2) NOT NULL DEFAULT 7.00,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

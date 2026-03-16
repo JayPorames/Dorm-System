@@ -47,9 +47,9 @@
                 :color="getStatusColor(room.status)"
                 size="small"
                 variant="flat"
-                class="font-weight-bold text-uppercase"
+                class="font-weight-bold"
               >
-                {{ room.status }}
+                {{ getStatusText(room.status) }}
               </v-chip>
             </div>
 
@@ -197,6 +197,15 @@ const getStatusColor = (status) => {
     'MAINTENANCE': 'warning'
   }
   return colors[status] || 'grey'
+}
+
+const getStatusText = (status) => {
+  const statusTexts = {
+    'VACANT': 'ว่าง',
+    'OCCUPIED': 'เต็ม',
+    'MAINTENANCE': 'ปิดปรับปรุง'
+  }
+  return statusTexts[status] || status
 }
 
 onMounted(fetchRooms)

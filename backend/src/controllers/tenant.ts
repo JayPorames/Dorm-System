@@ -37,3 +37,22 @@ export const tenantController = new Elysia({ prefix: '/tenants', tags: ['Tenants
       address: t.Optional(t.String())
     })
   })
+
+  // UPDATE TENANT
+  .put('/:id', async ({ params, body }) => {
+    return await prisma.tenant.update({
+      where: { id: Number(params.id) },
+      data: body
+    })
+  }, {
+    params: t.Object({
+      id: t.Number()
+    }),
+    body: t.Object({
+      firstName: t.String(),
+      lastName: t.String(),
+      idCard: t.String(),
+      phone: t.String(),
+      address: t.Optional(t.String())
+    })
+  })

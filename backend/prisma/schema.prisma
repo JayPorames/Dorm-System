@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 model Room {
@@ -16,6 +16,7 @@ model Room {
   contracts     Contract[]
   meterReadings MeterReading[]
   repairs       RepairRequest[]
+  assets        Asset[]
 }
 
 enum RoomStatus {
@@ -57,21 +58,24 @@ model MeterReading {
   electricUnit Int
   month        Int
   year         Int
-
-  @@unique([roomId, month, year])
 }
 
 model Invoice {
-  id             Int           @id @default(autoincrement())
-  contractId     Int
-  contract       Contract      @relation(fields: [contractId], references: [id])
-  issueDate      DateTime      @default(now())
-  dueDate        DateTime
-  rentAmount     Decimal       @db.Decimal(10, 2)
-  waterAmount    Decimal       @db.Decimal(10, 2)
-  electricAmount Decimal       @db.Decimal(10, 2)
-  totalAmount    Decimal       @db.Decimal(10, 2)
-  status         InvoiceStatus @default(PENDING)
+  id               Int           @id @default(autoincrement())
+  contractId       Int
+  contract         Contract      @relation(fields: [contractId], references: [id])
+  issueDate        DateTime      @default(now())
+  dueDate          DateTime
+  rentAmount       Decimal       @db.Decimal(10, 2)
+  waterUnit        Int           @default(0)
+  electricUnit     Int           @default(0)
+  waterAmount      Decimal       @db.Decimal(10, 2)
+  electricAmount   Decimal       @db.Decimal(10, 2)
+  totalAmount      Decimal       @db.Decimal(10, 2)
+  status           InvoiceStatus @default(PENDING)
+  previousElectric Int           @default(0)
+  previousWater    Int           @default(0)
+  createdAt        DateTime      @default(now())
 }
 
 enum InvoiceStatus {
@@ -88,4 +92,43 @@ model RepairRequest {
   description String
   status      String   @default("PENDING")
   reportDate  DateTime @default(now())
+  assetId     Int?
+  asset       Asset?   @relation(fields: [assetId], references: [id])
+}
+
+model SystemConfig {
+  id           Int     @id @default(autoincrement())
+  waterRate    Decimal @default(18.00) @db.Decimal(10, 2)
+  electricRate Decimal @default(7.00) @db.Decimal(10, 2)
+}
+
+model Asset {
+  id           Int       @id @default(autoincrement())
+  name         String // ชื่อของ เช่น "เตียง 5 ฟุต", "แอร์ Samsung"
+  serialNumber String? // เลขเครื่อง (ถ้ามี) เอาไว้เช็คแอร์/ทีวี
+  type         AssetType @default(FURNITURE)
+  price        Decimal?  @db.Decimal(10, 2) // ราคาของ (เผื่อปรับเงิน)
+  condition    Condition @default(GOOD) // สภาพของ
+
+  roomId Int
+  room   Room @relation(fields: [roomId], references: [id])
+
+  // เชื่อมกับการแจ้งซ่อม (เผื่อซ่อมเฉพาะชิ้น)
+  repairs RepairRequest[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum AssetType {
+  FURNITURE // เฟอร์นิเจอร์ (เตียง, ตู้)
+  APPLIANCE // เครื่องใช้ไฟฟ้า (แอร์, ทีวี, ตู้เย็น)
+  OTHER
+}
+
+enum Condition {
+  GOOD // ใช้งานได้ปกติ
+  DAMAGED // ชำรุด/เสียหาย
+  REPAIRING // กำลังส่งซ่อม
+  LOST // สูญหาย
 }

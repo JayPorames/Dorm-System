@@ -23,3 +23,12 @@ export const roomController = new Elysia({ prefix: "/rooms", tags: ["Rooms"]  })
     })
   })
 
+  // src/controllers/room.ts
+// app.get('/rooms/:id/inventory', async ({ params }) => {
+//   return await prisma.room.findUnique({
+//     where: { id: Number(params.id) },
+//     include: {
+//       assets: true // ดึงรายการของทั้งหมดมาด้วย
+//     }
+//   })
+// })

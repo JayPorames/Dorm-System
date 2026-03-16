@@ -9,6 +9,7 @@ import { roomController } from './controllers/room'
 import { tenantController } from './controllers/tenant'
 import { contractController } from './controllers/contract'
 import { billingController } from './controllers/billing'
+import { configController } from './controllers/config'
 
 const app = new Elysia()
   // 1. Setup Plugins
@@ -34,6 +35,7 @@ const app = new Elysia()
   .use(tenantController)
   .use(contractController)
   .use(billingController)
+  .use(configController)
 
   // 3. Health Check
   .get('/', () => ({ status: 'ok', message: 'Dorm API is running 🚀' }))
